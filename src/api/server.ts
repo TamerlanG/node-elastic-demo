@@ -1,16 +1,20 @@
+require("dotenv").config();
+const apm = require('elastic-apm-node').start()
+
 import express from 'express';
-import dotenv from 'dotenv';
 import router from './routes';
 
-dotenv.config();
+function startServer(){  
+  const app = express();
+  const port = process.env.PORT;
 
-const app = express();
-const port = process.env.PORT;
+  app.use(express.json())
 
-app.use(express.json())
+  app.use('/', router);
 
-app.use('/', router);
+  app.listen(port, () => {
+    console.log(`[server]: Server is running at http://localhost:${port}`);
+  });
+}
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+startServer()
